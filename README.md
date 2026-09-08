@@ -101,6 +101,9 @@ Then:
 
 Full option reference, states, and troubleshooting: [`ubox_p4p_bridge/DOCS.md`](ubox_p4p_bridge/DOCS.md).
 
+Testing against real hardware, starting with a laptop test that needs no container:
+[docs/TESTING.md](docs/TESTING.md).
+
 ## Test order
 
 Prove one layer at a time, and do not skip ahead:
@@ -145,6 +148,7 @@ higher risk.
 ├── docs/
 │   ├── ARCHITECTURE.md        pipeline, health model, design decisions
 │   ├── RESEARCH_NOTES.md      verified upstream facts, pins, open questions
+│   ├── TESTING.md             step-by-step procedure for testing against real hardware
 │   ├── TEST_PLAN.md           automated coverage and the manual Pi checklist
 │   ├── TROUBLESHOOTING.md     build and development failures
 │   └── SECURITY.md            secret handling, exposure, supply chain

@@ -1,5 +1,9 @@
 # Test plan
 
+This file lists what must be true. For the step-by-step procedure, including
+proving the protocol on a laptop before building anything, see
+[TESTING.md](TESTING.md).
+
 ## Automated
 
 ```bash
