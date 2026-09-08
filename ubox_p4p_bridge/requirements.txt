@@ -1,0 +1,3 @@
+# Source distribution pinned because ARM64/musl needs a native build.
+kcp==0.1.6 --hash=sha256:1e3632509119bd6a24599ee043e21ef6842675413a41720c526d14896357afc4
+

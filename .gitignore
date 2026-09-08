@@ -1,0 +1,13 @@
+.research/
+.tools/
+.artifacts/
+.venv/
+__pycache__/
+*.py[cod]
+options.json
+*.h265
+*.hevc
+*.pcap*
+*.log
+.env
+

@@ -1,0 +1,66 @@
+configuration:
+  camera_uid:
+    name: Camera UID
+    description: >-
+      The 20-character ID from the camera's Device info screen. Leave blank to search the
+      LAN for a single camera.
+  camera_password:
+    name: Camera device password
+    description: >-
+      The camera's device password from the mobile app, which may differ from the app
+      account password. Required.
+  auto_discover:
+    name: Discover camera on the LAN
+    description: >-
+      Broadcast a UBox LAN search when the camera UID is blank. Discovery only proceeds
+      when exactly one camera replies.
+  discovery_broadcast:
+    name: Discovery broadcast address
+    description: >-
+      Where to send the LAN search. Use a subnet broadcast such as 192.168.0.255 if the
+      global broadcast address is filtered.
+  mode:
+    name: Connection mode
+    description: >-
+      Direct P2P is the only mode that yields sustained video. Relay is a choppy
+      diagnostic that confirms the credentials and the protocol.
+  stream_name:
+    name: Stream name
+    description: The RTSP path segment, as in rtsp://HOME_ASSISTANT_IP:8557/q5.
+  rtsp_port:
+    name: RTSP port
+    description: >-
+      Host port for the RTSP server. Avoid 8554, which go2rtc commonly uses.
+  rtsp_username:
+    name: RTSP username
+    description: Used only when an RTSP password is set. The name "any" is reserved.
+  rtsp_password:
+    name: RTSP password
+    description: >-
+      Require a login to read the stream. When blank, unauthenticated reads are allowed
+      from private address ranges only.
+  handshake_seconds:
+    name: Handshake wait
+    description: >-
+      How long the direct handshake waits for the camera knock. Ignored in relay mode.
+  startup_timeout_seconds:
+    name: Startup deadline
+    description: >-
+      Abandon a session that never publishes a frame. Must exceed the handshake wait by at
+      least 45 seconds to allow for discovery and NAT punching.
+  idle_timeout_seconds:
+    name: Idle timeout
+    description: >-
+      Restart the session after this many seconds of silence on a stream that was already
+      running.
+  retry_seconds:
+    name: Retry delay
+    description: How long to wait before starting the next session.
+  input_fps:
+    name: Camera frame rate
+    description: >-
+      Raw HEVC carries no timestamps, so this value generates them. A wrong value plays
+      back too fast or too slow.
+  log_level:
+    name: Log level
+    description: Use debug for detailed MediaMTX output.

@@ -1,0 +1,45 @@
+name: UBox P4P Bridge
+version: "0.1.0"
+slug: ubox_p4p_bridge
+description: Experimental UBox camera discovery and P4P to RTSP bridge
+arch:
+  - aarch64
+startup: services
+boot: auto
+init: false
+host_network: true
+stage: experimental
+timeout: 20
+options:
+  camera_uid: ""
+  camera_password: ""
+  auto_discover: true
+  discovery_broadcast: "255.255.255.255"
+  mode: direct
+  stream_name: q5
+  rtsp_port: 8557
+  rtsp_username: viewer
+  rtsp_password: ""
+  handshake_seconds: 40
+  startup_timeout_seconds: 120
+  idle_timeout_seconds: 30
+  retry_seconds: 10
+  input_fps: 15
+  log_level: info
+schema:
+  camera_uid: "match(^([A-Za-z0-9]{20})?$)"
+  camera_password: password
+  auto_discover: bool
+  discovery_broadcast: str
+  mode: list(direct|relay)
+  stream_name: "match(^[A-Za-z0-9][A-Za-z0-9_-]{0,63}$)"
+  rtsp_port: "int(1024,65535)"
+  rtsp_username: "match(^[A-Za-z0-9_-]{1,32}$)"
+  rtsp_password: password
+  handshake_seconds: "int(10,120)"
+  startup_timeout_seconds: "int(60,600)"
+  idle_timeout_seconds: "int(5,300)"
+  retry_seconds: "int(5,300)"
+  input_fps: "int(1,60)"
+  log_level: list(info|debug|warning|error)
+
