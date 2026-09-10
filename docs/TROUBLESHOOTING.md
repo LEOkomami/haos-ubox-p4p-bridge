@@ -48,6 +48,10 @@ the current `p4p_stream.py` before repinning. `worker.py` depends on `run_stream
 through an `open(path, "wb")` call. `upstream_log` depends on the exact milestone and
 counter strings, which are tabulated in `docs/RESEARCH_NOTES.md`.
 
+**The build exits 141 right after the MediaMTX checksum passes.** That is SIGPIPE under
+`pipefail`. Never use `grep -q` on the right of a pipe in this Dockerfile; let grep read
+the whole stream and redirect to `/dev/null` instead.
+
 **The FFmpeg HEVC demuxer check fails.** The base image's FFmpeg build changed. Without
 the HEVC demuxer the whole approach fails, so the build should stop here.
 

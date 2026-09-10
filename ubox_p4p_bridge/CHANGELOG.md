@@ -12,6 +12,10 @@ The Pi no longer builds anything.
   pushed manifest. Build only; tests stay local.
 - A test keeps `config.yaml` `version` and the Dockerfile `BUILD_VERSION` in sync, because
   the Supervisor pulls the tag named by `version` and CI tags with `BUILD_VERSION`.
+- Fixed a false build failure: the FFmpeg capability checks used `grep -q`, which exits on
+  first match and SIGPIPEs ffmpeg; under the base image's `pipefail` shell that returned
+  exit 141 after everything had actually passed. The same line would have failed an
+  on-device build on the Pi, after the compile had already run.
 
 ## 0.1.1
 

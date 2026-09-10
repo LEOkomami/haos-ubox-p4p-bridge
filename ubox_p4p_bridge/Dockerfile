@@ -30,8 +30,8 @@ RUN test "${BUILD_ARCH}" = aarch64 \
     && mkdir -p /usr/share/licenses/mediamtx \
     && cp /tmp/mediamtx/LICENSE /usr/share/licenses/mediamtx/LICENSE \
     && python3 -c "from kcp.extension import KCP; KCP(1)" \
-    && ffmpeg -hide_banner -demuxers 2>&1 | grep -q hevc \
-    && ffmpeg -hide_banner -muxers 2>&1 | grep -q rtsp \
+    && ffmpeg -hide_banner -demuxers 2>&1 | grep hevc >/dev/null \
+    && ffmpeg -hide_banner -muxers 2>&1 | grep rtsp >/dev/null \
     && mediamtx --version \
     && apk del .build-deps \
     && rm -rf /tmp/requirements.txt /tmp/mediamtx /tmp/mediamtx.tar.gz
