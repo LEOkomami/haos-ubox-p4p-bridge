@@ -10,7 +10,7 @@ proving the protocol on a laptop before building anything, see
 python tests/run_tests.py
 ```
 
-24 tests. The media test is skipped unless real binaries are supplied:
+25 tests. The media test is skipped unless real binaries are supplied:
 
 ```bash
 BRIDGE_TEST_FFMPEG=/path/to/ffmpeg BRIDGE_TEST_MEDIAMTX=/path/to/mediamtx python tests/run_tests.py
@@ -40,9 +40,10 @@ Coverage by area:
 Automated tests cannot cover the build or the camera. Work through these in order and
 record the outcome in `docs/RESEARCH_NOTES.md`.
 
-### 1. Build
+### 1. Image
 
-- [ ] The image builds on the Pi for `aarch64`.
+- [ ] The GitHub Actions run for the current version is green and the package is public.
+- [ ] Installing from the repository pulls the image; the add-on log shows no compile.
 - [ ] `kcp` compiles against musl and the extension import check succeeds.
 - [ ] The MediaMTX hash check passes and the version check prints 1.21.0.
 - [ ] The upstream commit assertion passes.

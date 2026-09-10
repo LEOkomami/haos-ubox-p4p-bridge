@@ -1,6 +1,7 @@
 name: UBox P4P Bridge
-version: "0.1.1"
+version: "0.1.2"
 slug: ubox_p4p_bridge
+image: "ghcr.io/leokomami/ubox-p4p-bridge-{arch}"
 description: Experimental UBox camera discovery and P4P to RTSP bridge
 arch:
   - aarch64

@@ -29,6 +29,18 @@ class ConfigurationTests(unittest.TestCase):
         self.assertEqual(config["schema"]["camera_password"], "password")
         self.assertEqual(config["arch"], ["aarch64"])
 
+    def test_supervisor_pulls_a_prebuilt_image_and_versions_stay_in_sync(self):
+        # With image: set, the Supervisor pulls <image>:<version> instead of compiling on
+        # the host. The tag it pulls must be the one CI built, so the two versions must match.
+        import re
+        import yaml
+        config = yaml.safe_load((ROOT / "ubox_p4p_bridge/config.yaml").read_text())
+        self.assertEqual(config["image"], "ghcr.io/leokomami/ubox-p4p-bridge-{arch}")
+        dockerfile = (ROOT / "ubox_p4p_bridge/Dockerfile").read_text()
+        build_version = re.search(r"^ARG BUILD_VERSION=(\S+)$", dockerfile, re.M).group(1)
+        self.assertEqual(str(config["version"]), build_version)
+        self.assertTrue((ROOT / ".github/workflows/build-image.yml").is_file())
+
     def test_experimental_app_does_not_start_itself_on_boot(self):
         # An app whose build can destabilise the host must never auto-start unattended,
         # or a bad boot becomes a loop the user cannot break into.

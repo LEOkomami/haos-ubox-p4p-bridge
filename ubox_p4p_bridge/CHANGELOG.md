@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.1.2
+
+The Pi no longer builds anything.
+
+- `image:` added to `config.yaml`. The Supervisor now pulls a prebuilt aarch64 image from
+  `ghcr.io/leokomami/ubox-p4p-bridge-aarch64` instead of building the Dockerfile on the
+  host. The kcp compile (Cython plus `gcc -O3`) runs on GitHub's build servers.
+- GitHub Actions workflow `build-image.yml` builds and publishes on every change under
+  `ubox_p4p_bridge/`, refuses to overwrite an already-published version, and verifies the
+  pushed manifest. Build only; tests stay local.
+- A test keeps `config.yaml` `version` and the Dockerfile `BUILD_VERSION` in sync, because
+  the Supervisor pulls the tag named by `version` and CI tags with `BUILD_VERSION`.
+
 ## 0.1.1
 
 Safety release. No functional changes to the stream.

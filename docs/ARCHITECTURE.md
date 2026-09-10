@@ -85,6 +85,11 @@ point retrying around a dead RTSP server, because every consumer's URL is alread
 
 ## Build pinning
 
+The image is built once by GitHub Actions and published to ghcr.io. `config.yaml` names
+it with `image:`, so the Supervisor pulls a finished image rather than compiling on the
+host. That matters because `kcp` has no aarch64 Linux wheel: a source build always runs
+Cython and `gcc -O3`, which is the wrong thing to do on the machine running the home.
+
 `aarch64` only, and asserted twice: `BUILD_ARCH` and `uname -m`. The image pins the base
 image digest, the upstream commit, the `kcp` source distribution hash, and the MediaMTX
 release hash. The build then proves what it needs rather than assuming it: the `kcp` C

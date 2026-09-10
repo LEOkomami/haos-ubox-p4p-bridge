@@ -19,9 +19,9 @@ Independent interoperability work. Not affiliated with any camera vendor. See
 | Part | State |
 | --- | --- |
 | HEVC to RTSP pipeline | Verified end to end against synthetic HEVC with real FFmpeg and MediaMTX |
-| Supervision, stall recovery, secret handling | Covered by 24 automated tests |
+| Supervision, stall recovery, secret handling | Covered by 25 automated tests |
 | Build pins | Upstream commit, `kcp` hash, and MediaMTX hash verified against release data |
-| `aarch64` container build on a Pi 4 | Not yet run |
+| Prebuilt `aarch64` image | Built by GitHub Actions, published to ghcr.io; the Pi pulls it and compiles nothing |
 | P4P handshake against a real `Q5-wifi(pir)` | **Not yet attempted** |
 
 Everything below the pipe is proven. Everything above it is a hypothesis, including
@@ -83,13 +83,13 @@ networking.
 
 ## Install
 
-> **Read this first.** Installing from this repository makes the Supervisor **build the
-> image on your Pi**, and that build compiles the `kcp` C extension with Cython and
-> `gcc -O3` on the same machine running your home. PyPI ships no aarch64 Linux wheel, so
-> the compile is unavoidable during a source build. On a Pi 4 with marginal storage or
-> power this is heavy enough to matter. Install from a **prebuilt image** when one is
-> published, or accept that the build will load the box for several minutes. The app also
-> ships `boot: manual` so it never restarts itself after a reboot.
+> **Nothing is compiled on your Pi.** `config.yaml` names a prebuilt image, so the
+> Supervisor pulls `ghcr.io/leokomami/ubox-p4p-bridge-aarch64:<version>` and never runs the
+> Dockerfile locally. That image is built by GitHub Actions on every change. The one way to
+> trigger an on-device build is to copy `ubox_p4p_bridge/` into `/addons/` as a local add-on,
+> which compiles the `kcp` C extension with Cython and `gcc -O3` on the host. Do not do that
+> on a Pi that also runs your home. The app ships `boot: manual` so it never restarts
+> itself after a reboot.
 
 Push this repository to GitHub, then in Home Assistant open the app or add-on store, use
 the overflow menu, choose Repositories, and add the repository URL. `repository.yaml` at
@@ -153,6 +153,8 @@ higher risk.
 ├── NOTICE.md                  non-affiliation and third-party components
 ├── LICENSE                    MIT
 ├── repository.yaml            marks this as an HA app repository
+├── .github/workflows/
+│   └── build-image.yml        builds the aarch64 image on GitHub and publishes to ghcr.io
 ├── docs/
 │   ├── ARCHITECTURE.md        pipeline, health model, design decisions
 │   ├── RESEARCH_NOTES.md      verified upstream facts, pins, open questions
@@ -165,8 +167,8 @@ higher risk.
 │   ├── test_bridge.py         unit and validation tests
 │   └── test_end_to_end.py     real FFmpeg and MediaMTX, synthetic camera
 └── ubox_p4p_bridge/
-    ├── config.yaml            HA app metadata and option schema
-    ├── Dockerfile             aarch64, fully pinned
+    ├── config.yaml            HA app metadata, option schema, prebuilt image name
+    ├── Dockerfile             aarch64, fully pinned; built by CI, not by the Pi
     ├── requirements.txt       kcp, hash-pinned
     ├── run.sh
     ├── DOCS.md                the app's Documentation tab

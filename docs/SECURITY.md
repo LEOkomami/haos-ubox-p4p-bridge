@@ -55,12 +55,15 @@ pinned:
 | `kcp` 0.1.6 | source distribution SHA-256, with `--require-hashes` |
 | MediaMTX 1.21.0 | release tarball SHA-256 |
 
-Build toolchains are installed as a virtual package and removed in the same layer.
+Build toolchains are installed as a virtual package and removed in the same layer. The
+image is built by GitHub Actions (`.github/workflows/build-image.yml`) and published to
+ghcr.io; the Supervisor pulls it by the tag named in `config.yaml`, so the Pi never runs
+the build. The workflow refuses to overwrite an already-published version tag.
 
 **Known gap.** `kcp` 0.1.6 ships only a Cython source file, and its `[build-system]`
 requires `poetry-core`, `cython == 3.0.11`, `entrypoint`, and `setuptools`. pip fetches
 those into an isolated build environment, and `--require-hashes` does not extend to PEP
-518 build dependencies, so they are resolved unpinned at build time. Only `cython` carries
+518 build dependencies, so they are resolved unpinned at build time, on the CI runner rather than the Pi. Only `cython` carries
 an upstream `==` pin. Closing this properly means either vendoring a prebuilt wheel or
 building with `--no-build-isolation` against explicitly pinned build dependencies.
 
