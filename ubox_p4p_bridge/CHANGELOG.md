@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.1.1
+
+Safety release. No functional changes to the stream.
+
+- `boot: manual` instead of `boot: auto`. An experimental app whose build runs a compiler
+  on the host must never restart itself unattended, or a bad boot becomes a loop the user
+  cannot break into. A test now pins this.
+- Documented that installing from source compiles `kcp` with Cython and `gcc -O3` on the
+  Pi itself, because PyPI publishes no aarch64 Linux wheel. Do not install from source on
+  a Pi that also runs your Home Assistant; use the prebuilt image once it exists.
+- Corrected `docs/SECURITY.md`: `--require-hashes` does not cover PEP 518 build
+  dependencies, so kcp's build chain (poetry-core, cython, entrypoint, setuptools) resolves
+  unpinned during a source build.
+
 ## 0.1.0
 
 First experimental release. Not yet validated against a real camera.

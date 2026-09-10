@@ -29,6 +29,14 @@ class ConfigurationTests(unittest.TestCase):
         self.assertEqual(config["schema"]["camera_password"], "password")
         self.assertEqual(config["arch"], ["aarch64"])
 
+    def test_experimental_app_does_not_start_itself_on_boot(self):
+        # An app whose build can destabilise the host must never auto-start unattended,
+        # or a bad boot becomes a loop the user cannot break into.
+        import yaml
+        config = yaml.safe_load((ROOT / "ubox_p4p_bridge/config.yaml").read_text())
+        self.assertEqual(config["boot"], "manual")
+        self.assertEqual(config["stage"], "experimental")
+
     def test_translations_cover_every_option_exactly(self):
         import yaml
         config = yaml.safe_load((ROOT / "ubox_p4p_bridge/config.yaml").read_text())

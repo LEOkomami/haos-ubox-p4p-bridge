@@ -1,11 +1,11 @@
 name: UBox P4P Bridge
-version: "0.1.0"
+version: "0.1.1"
 slug: ubox_p4p_bridge
 description: Experimental UBox camera discovery and P4P to RTSP bridge
 arch:
   - aarch64
 startup: services
-boot: auto
+boot: manual
 init: false
 host_network: true
 stage: experimental

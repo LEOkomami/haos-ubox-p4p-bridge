@@ -45,7 +45,7 @@ the host, so it is treated as hostile by default:
 ## Supply chain
 
 No vendor APK, shared object, firmware image, or other proprietary binary is in this
-repository, and none is downloaded at build time. Everything fetched during the build is
+repository, and none is downloaded at build time. The dependencies this project names are
 pinned:
 
 | Dependency | Pin |
@@ -56,6 +56,13 @@ pinned:
 | MediaMTX 1.21.0 | release tarball SHA-256 |
 
 Build toolchains are installed as a virtual package and removed in the same layer.
+
+**Known gap.** `kcp` 0.1.6 ships only a Cython source file, and its `[build-system]`
+requires `poetry-core`, `cython == 3.0.11`, `entrypoint`, and `setuptools`. pip fetches
+those into an isolated build environment, and `--require-hashes` does not extend to PEP
+518 build dependencies, so they are resolved unpinned at build time. Only `cython` carries
+an upstream `==` pin. Closing this properly means either vendoring a prebuilt wheel or
+building with `--no-build-isolation` against explicitly pinned build dependencies.
 
 ## Legal position
 

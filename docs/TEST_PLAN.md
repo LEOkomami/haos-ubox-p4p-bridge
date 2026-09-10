@@ -10,7 +10,7 @@ proving the protocol on a laptop before building anything, see
 python tests/run_tests.py
 ```
 
-23 tests. The media test is skipped unless real binaries are supplied:
+24 tests. The media test is skipped unless real binaries are supplied:
 
 ```bash
 BRIDGE_TEST_FFMPEG=/path/to/ffmpeg BRIDGE_TEST_MEDIAMTX=/path/to/mediamtx python tests/run_tests.py

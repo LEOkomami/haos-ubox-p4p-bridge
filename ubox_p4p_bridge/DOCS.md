@@ -22,6 +22,14 @@ The device password is the camera password from the mobile app, which may differ
 app or cloud account password. Enter it only in this app's Configuration tab. It is stored
 in Home Assistant's app options and never written to the logs.
 
+## Before you install
+
+Installing from source makes the Supervisor build this image **on the Pi**, and the build
+compiles a C extension with Cython and `gcc -O3` because PyPI ships no aarch64 Linux wheel
+for `kcp`. That is heavy on a Pi 4, and it is heaviest on one with a worn SD card or a weak
+power supply. Prefer a prebuilt image when one is offered. The app does not start itself
+on boot (`boot: manual`), so a failed start can never become a boot loop.
+
 ## Setup
 
 1. Install the app and open its **Configuration** tab.

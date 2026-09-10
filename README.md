@@ -19,7 +19,7 @@ Independent interoperability work. Not affiliated with any camera vendor. See
 | Part | State |
 | --- | --- |
 | HEVC to RTSP pipeline | Verified end to end against synthetic HEVC with real FFmpeg and MediaMTX |
-| Supervision, stall recovery, secret handling | Covered by 23 automated tests |
+| Supervision, stall recovery, secret handling | Covered by 24 automated tests |
 | Build pins | Upstream commit, `kcp` hash, and MediaMTX hash verified against release data |
 | `aarch64` container build on a Pi 4 | Not yet run |
 | P4P handshake against a real `Q5-wifi(pir)` | **Not yet attempted** |
@@ -82,6 +82,14 @@ networking.
   the whole reason this belongs on the Pi.
 
 ## Install
+
+> **Read this first.** Installing from this repository makes the Supervisor **build the
+> image on your Pi**, and that build compiles the `kcp` C extension with Cython and
+> `gcc -O3` on the same machine running your home. PyPI ships no aarch64 Linux wheel, so
+> the compile is unavoidable during a source build. On a Pi 4 with marginal storage or
+> power this is heavy enough to matter. Install from a **prebuilt image** when one is
+> published, or accept that the build will load the box for several minutes. The app also
+> ships `boot: manual` so it never restarts itself after a reboot.
 
 Push this repository to GitHub, then in Home Assistant open the app or add-on store, use
 the overflow menu, choose Repositories, and add the repository URL. `repository.yaml` at
