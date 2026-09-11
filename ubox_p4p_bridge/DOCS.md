@@ -31,6 +31,14 @@ compiles a C extension with Cython and `gcc -O3` on the host. Avoid that on a Pi
 runs Home Assistant. The app does not start itself on boot (`boot: manual`), so a failed
 start can never become a boot loop.
 
+## After installing: check the boot setting
+
+`config.yaml` declares `boot_config: manual`, but the Supervisor keeps a **separate
+per-add-on `boot` setting**, and it was observed initialising to `auto` on a real install
+(2026-09-11). Declaring it is not enough. On the Info tab, confirm **Start on boot is OFF**
+after installing and after every update. An experimental app that restarts itself
+unattended is how a bad start becomes a boot loop.
+
 ## Setup
 
 1. Install the app and open its **Configuration** tab.

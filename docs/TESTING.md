@@ -164,6 +164,10 @@ compile on the host. If the version is stale, use Check for updates and wait.
 
 The install log should show layers being pulled and no compiler output at all.
 
+Then, on the Info tab, **turn Start on boot OFF**. The Supervisor's stored `boot` setting
+was observed coming up as `auto` despite `config.yaml` declaring `boot_config: manual`, so
+verify it rather than assuming it.
+
 Then start it **with `camera_password` still blank** and read the Log tab:
 
 ```text
