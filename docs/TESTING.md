@@ -156,12 +156,13 @@ Now prove the packaging, separately from the camera.
 Add the repository in **Settings, Add-ons, Add-on Store**, overflow menu, **Repositories**,
 then install **UBox P4P Bridge**.
 
-The build compiles `kcp` from source, because there is no musl `aarch64` wheel, so expect
-several minutes. Watch for these in the build log:
+Before clicking Install, confirm the store shows **0.1.2 or later**. From that version
+`config.yaml` names a prebuilt image, so the Supervisor pulls
+`ghcr.io/leokomami/ubox-p4p-bridge-aarch64:<version>` and compiles nothing on the Pi. An
+older entry without `image:` would build on-device, which is the one path back to a heavy
+compile on the host. If the version is stale, use Check for updates and wait.
 
-- The `kcp` compile succeeding, which is the most likely failure.
-- The MediaMTX checksum check passing.
-- The upstream commit assertion passing.
+The install log should show layers being pulled and no compiler output at all.
 
 Then start it **with `camera_password` still blank** and read the Log tab:
 
