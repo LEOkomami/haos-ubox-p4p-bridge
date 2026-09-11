@@ -1,5 +1,19 @@
 # Changelog
 
+## 0.1.3
+
+Auto-discovery only. **No change to the P4P handshake, streaming, or anything the add-on
+does when `camera_uid` is set explicitly.**
+
+- LAN discovery now locates the UID field itself rather than trusting upstream's reader.
+  Upstream reads offset 20 and accepts any 10+ alphanumeric run; on the tested Q5 firmware
+  the UID sits at offset 16, so upstream reported the last 16 characters plus a stray byte,
+  which `auto_discover` then rejected as malformed. The bridge scans candidate offsets and
+  returns a UID only when exactly one 20-character field qualifies, falling back to the
+  upstream value when the raw payload is unavailable.
+- Still recommended to set `camera_uid` explicitly and leave `auto_discover` off; discovery
+  cannot wake a sleeping camera, so it only ever works when the camera is already awake.
+
 ## 0.1.2
 
 The Pi no longer builds anything.

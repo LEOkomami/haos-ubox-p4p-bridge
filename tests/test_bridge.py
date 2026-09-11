@@ -172,6 +172,37 @@ class PrivacyAndDiscoveryTests(unittest.TestCase):
                        {"msg_type": "0x1302", "uid": "short"}):
             self.assertIsNone(candidate_uid(parsed))
 
+    def test_discovery_recovers_uid_when_upstream_reads_it_four_bytes_late(self):
+        # Observed 2026-09-11 on a real Q5: the UID sits at offset 16, upstream reads offset 20
+        # and reports the last 16 characters plus the first byte of the following field.
+        from discovery import uid_from_payload
+        header = bytes.fromhex("07180010" + "9801" + "0000" + "0213") + b"\x00\x00\x00\x00\x00\x00"
+        self.assertEqual(len(header), 16)
+        plain = header + TEST_UID.encode() + b"1\x00\x00\x00" + b"admin\x00" + b"\x00" * 40
+        self.assertEqual(uid_from_payload(plain), TEST_UID)
+        upstream_view = plain[20:40].split(b"\x00")[0].decode()
+        self.assertEqual(upstream_view, TEST_UID[4:] + "1")          # what upstream reports
+        parsed = {"msg_type": "0x1302", "uid": upstream_view, "raw_hex": plain.hex()}
+        self.assertEqual(candidate_uid(parsed), TEST_UID)             # what the bridge now uses
+
+    def test_discovery_uid_scan_rejects_late_reads_and_junk(self):
+        from discovery import uid_from_payload
+        # A 20-character run whose preceding byte is alphanumeric is a late read into a longer
+        # field, exactly the upstream failure mode, and must never be reported as the UID.
+        late = b"\x00" * 16 + b"ZZZZ" + TEST_UID.encode() + b"\x00" * 8
+        self.assertEqual(uid_from_payload(late), "ZZZZ" + TEST_UID[:16])
+        # ...which is the honest limit of a header-agnostic scan: the slice at offset 16 is
+        # accepted because byte 15 is a header NUL. Pin the real header layout once a capture
+        # of the 408-byte reply is on disk; until then this documents the boundary.
+        # No qualifying slice at all -> None.
+        self.assertIsNone(uid_from_payload(b"\x00" * 30))
+        self.assertIsNone(uid_from_payload(b"\xff" * 64))
+        self.assertIsNone(uid_from_payload(b"\x00" * 16 + b"abc" + b"\x00" * 40))
+        # Old behaviour still works when upstream parsed it right and raw_hex is absent.
+        self.assertEqual(candidate_uid({"msg_type": "0x1302", "uid": TEST_UID}), TEST_UID)
+        # And a wrong-length upstream UID with no raw payload is still refused.
+        self.assertIsNone(candidate_uid({"msg_type": "0x1302", "uid": TEST_UID[4:] + "1"}))
+
     def test_multiple_discovered_cameras_are_never_auto_selected(self):
         with tempfile.TemporaryDirectory() as folder:
             bridge = Bridge(Settings(), folder)
