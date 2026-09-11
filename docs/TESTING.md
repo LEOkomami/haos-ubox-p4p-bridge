@@ -40,15 +40,36 @@ need a compiler and Python headers.
 Start here, because it costs nothing and settles the project's biggest open question.
 
 ```bash
-python3 lan_tools.py discover --subnet 192.168.0.255 --timeout 12 --bursts 6
+python3 lan_tools.py discover --subnet 192.168.0.255 --uid YOUR_20_CHAR_UID --timeout 12 --bursts 6
 ```
 
-Use your own subnet broadcast address. If the machine has several interfaces, such as a VPN
-or Bluetooth adapter, name the subnet explicitly rather than relying on
-`255.255.255.255`, which may leave through the wrong one.
+`--subnet` is the **broadcast** address of your LAN, ending in `.255`. It is not the
+camera's IP. Upstream is explicit that the camera ignores unicast, so pointing this at
+`192.168.0.193` yields a guaranteed silence that proves nothing. Passing `--uid` puts the
+UID into the request; some firmware only answers a search that names it.
 
-Wake the camera first. A PIR model that has been idle will not answer, so walk in front of
-it, or open the vendor app, then run the command within a few seconds.
+If the machine has several interfaces, such as a VPN or Bluetooth adapter, name the subnet
+explicitly rather than relying on `255.255.255.255`, which may leave through the wrong one.
+
+**Wake the camera properly.** A PIR model that shows "online" in the app is usually only
+keeping a cloud heartbeat; its LAN responder may be asleep. Open the camera's **live view**
+in the app, keep it open, and run the command within a few seconds.
+
+**On Windows, add a firewall rule first.** The reply to a broadcast comes from the camera's
+own IP, a different address than you sent to, so Windows Firewall treats it as unsolicited
+inbound UDP and silently drops it. Allow inbound UDP for the exact `python.exe` you are
+running, Private profile, local subnet only. Without that rule the tool cannot see a camera
+even when one answers.
+
+If discovery stays silent, run `python3 lan_tools.py listen` in a second window and then
+open or refresh the vendor app on a phone on the **same WiFi as the camera**. `listen`
+captures the app's own search packets and the camera's replies on port 32762, so it shows
+the protocol in use without depending on the camera answering *you*. Seeing the phone's
+packets also proves broadcast reaches this machine at all.
+
+A silent LAN search is **not** proof the camera lacks P4P. LAN discovery is a convenience;
+the real handshake in 0c goes through the P4P masters and needs only the UID and device
+password.
 
 | Result | What it means | Next |
 | --- | --- | --- |

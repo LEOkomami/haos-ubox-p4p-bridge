@@ -31,7 +31,15 @@ No P4P handshake has been attempted against this camera. All of these remain ope
 - The camera's actual frame rate, which `input_fps` must match.
 - Whether this model offers anything other than HEVC.
 
-The ecosystem identification, UBox / UBIA / i-Cam+, is still a hypothesis.
+The paired mobile app is confirmed as **i-Cam+** (2026-09-11), which places the camera in
+the UBox / UBIA family this design assumes. Protocol compatibility itself is still
+unproven until a P4P handshake succeeds.
+
+Upstream's `lan_tools.py` documents that the camera ignores unicast LAN search; discovery
+must be broadcast to `x.x.x.255:32762`. The first real attempt on 2026-09-11 was unicast to
+the camera IP and therefore uninformative. On Windows the reply is also dropped by the
+firewall unless inbound UDP is allowed for the sending `python.exe`, because it arrives
+from a different address than the broadcast target.
 
 ## Upstream, verified 2026-09-08 against commit 6f9f87fc31da4eb86531a81b08b3b1ffa4db5fa8
 
