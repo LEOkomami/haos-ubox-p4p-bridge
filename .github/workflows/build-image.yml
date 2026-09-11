@@ -13,6 +13,13 @@ on:
     paths:
       - "ubox_p4p_bridge/**"
       - ".github/workflows/build-image.yml"
+    # These never enter the image (the Dockerfile copies only requirements.txt, bridge/ and
+    # run.sh), so editing them must not trigger a build that would then fail the
+    # already-published version guard.
+    paths-ignore:
+      - "ubox_p4p_bridge/DOCS.md"
+      - "ubox_p4p_bridge/CHANGELOG.md"
+      - "ubox_p4p_bridge/translations/**"
   workflow_dispatch:
 
 permissions:
